@@ -9,7 +9,7 @@ Sequel.migration do
       foreign_key :owner_id, :accounts
 
       Date :date_start, null: false
-      Integer :living_object, null: false # 1 => Human # 2 => Animal # 3 => Plant
+      String :living_object, null: false # 1 => Human # 2 => Animal # 3 => Plant
       Integer :current_hydration, null: false, default: 400
       Integer :total_intakes, null: false, default: 0
       Integer :total_die, null: false, default: 0

@@ -59,9 +59,8 @@ module Waterious
             x['username'] = "My Username of var " + var.to_s
             x['password'] = "ManusiaHebat"
             x['email'] = "ManusiaHebat" + var.to_s + "@iss.nthu.edu.tw"
-            x['profile'] = 'https://s3.amazonaws.com/Waterious-app/profile/default.jpg'
+            x['profile'] = "https://s3.amazonaws.com/Waterious-app/profile/default.jpg"
             new_account = EmailAccount.new(x)
-            puts new_account
             raise('Could not save account') unless new_account.save
             var = var + 1             
           end
@@ -84,8 +83,8 @@ module Waterious
           accounts = Account.all
           accounts.each do |account|
             #update condition
-            puts "now its condition: "
-            puts condition
+            # puts "now its condition: "
+            # puts condition
 
             Waterious::Account.where(id: account.id).update(condition: condition)
 
