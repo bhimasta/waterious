@@ -18,7 +18,6 @@ gem 'pry'
 gem 'rack-test'
 
 # Security
-# gem 'rbnacl-libsodium'
 gem 'rbnacl'
 
 # Services
