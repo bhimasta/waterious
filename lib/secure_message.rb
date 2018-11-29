@@ -2,7 +2,7 @@
 
 require 'base64'
 require 'rbnacl'
-# require 'rbnacl/libsodium'
+require 'rbnacl/libsodium'
 
 # Encrypt and Decrypt from Database
 class SecureMessage

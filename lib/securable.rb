@@ -2,7 +2,7 @@
 
 require 'base64'
 require 'rbnacl'
-# require 'rbnacl/libsodium'
+require 'rbnacl/libsodium'
 
 # Extend this module into security library classes requiring cryptography
 module Securable

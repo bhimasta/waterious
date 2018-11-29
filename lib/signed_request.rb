@@ -2,7 +2,7 @@
 
 require 'rbnacl'
 require 'base64'
-# require 'rbnacl/libsodium'
+require 'rbnacl/libsodium'
 
 require_relative 'securable.rb'
 
