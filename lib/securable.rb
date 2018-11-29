@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require 'base64'
-# require 'rbnacl/libsodium'
 require 'rbnacl'
+require 'rbnacl/libsodium'
 
 # Extend this module into security library classes requiring cryptography
 module Securable
