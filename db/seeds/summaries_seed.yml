@@ -1,0 +1,16 @@
+---
+- date_start: '2018-11-23'
+  living_object: 'Human'
+  current_hydration: 350
+  total_intakes: 1200
+  total_die: 0
+- date_start: '2018-11-24'
+  living_object: 'Plant'
+  current_hydration: 200
+  total_intakes: 400
+  total_die: 5
+- date_start: '2018-11-25'
+  living_object: 'Animal'
+  current_hydration: 300
+  total_intakes: 800
+  total_die: 3

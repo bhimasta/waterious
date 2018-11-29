@@ -1,0 +1,10 @@
+---
+- amount_intake: 400
+  current_hydration: 150
+  notification: 0
+- amount_intake: 400
+  current_hydration: 200
+  notification: 1
+- amount_intake: 400
+  current_hydration: 300
+  notification: 0    
