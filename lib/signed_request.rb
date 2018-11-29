@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require 'rbnacl/libsodium'
+# require 'rbnacl/libsodium'
+require 'rbnacl'
 require 'base64'
 
 require_relative 'securable.rb'

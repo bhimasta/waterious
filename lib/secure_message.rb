@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require 'base64'
-require 'rbnacl/libsodium'
+# require 'rbnacl/libsodium'
+require 'rbnacl'
+
 
 # Encrypt and Decrypt from Database
 class SecureMessage
