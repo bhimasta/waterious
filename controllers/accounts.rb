@@ -70,7 +70,7 @@ module Waterious
           { message: 'All Account created' }.to_json
           # { message: 'Haiiii' }.to_json
         rescue StandardError => error
-          puts "ERROR CREATING 15 ACCOUNTS: #{error.inspect}"
+          puts "ERROR CREATING 15 ACCOUNTS BECAUSE: #{error.inspect}"
           puts error.backtrace
           routing.halt 404, { message: error.message }.to_json
         end
