@@ -56,8 +56,8 @@ module Waterious
           x = {}
           new_account = {}
           (1..15).each do
-            x['username'] = "My Username of var " + var.to_s
-            x['password'] = "ManusiaHebat"
+            x['username'] = "Username" + var.to_s
+            x['password'] = "123456"
             x['email'] = "ManusiaHebat" + var.to_s + "@iss.nthu.edu.tw"
             x['profile'] = "https://s3.amazonaws.com/Waterious-app/profile/default.jpg"
             new_account = EmailAccount.new(x)

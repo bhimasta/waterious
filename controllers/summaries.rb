@@ -27,6 +27,34 @@ module Waterious
         end
       end
 
+      # GET api/v1/summaries/loss_regularly
+      routing.on 'loss_regularly' do
+        routing.get do
+          # Update all today intake by - 5
+          start_date = Date.today
+          today_summaries = Summary.where(date_start: start_date).all
+          today_summaries.map do |summary|
+            new_total_die = summary.total_die
+            new_hydration = summary.current_hydration - 34
+            if (new_hydration <= 0) 
+              new_hydration = 400
+              new_total_die += 1
+            end
+            Waterious::Summary.where(id: summary.id)
+                              .update(current_hydration: new_hydration,
+                                      total_die: new_total_die)
+          end
+          new_summaries = Summary.where(date_start: start_date).all
+          response.status = 201
+          response['Location'] = "#{@summary_route}/loss_regularly"
+          { message: 'Data able to get', data: new_summaries }.to_json
+        rescue StandardError => error
+          puts "ERROR: #{error.inspect}"
+          puts error.backtrace
+          routing.halt 404, { message: 'Summary not found' }.to_json
+        end
+      end      
+
       routing.on String do |sum_id|
         # POST api/v1/summaries/[sum_id]/intake
         routing.on 'intake' do
@@ -87,7 +115,7 @@ module Waterious
 
             # Update Summary 
             new_total_die = summary.total_die
-            new_current_hydration = summary.current_hydration - 100
+            new_current_hydration = summary.current_hydration - 5
             if new_current_hydration <= 0
               new_current_hydration = 400
               new_total_die = summary.total_die + 1
