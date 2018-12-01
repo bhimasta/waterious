@@ -21,10 +21,12 @@ module Waterious
 
     configure :development, :test do
       ENV['DATABASE_URL'] = 'sqlite://' + config.DB_FILENAME
+      ENV['TZ'] = 'Asia/Taipei'
     end
 
     configure :production do
       # Don't specify: Heroku has DATABASE_URL environment variable
+      ENV['TZ'] = 'Asia/Taipei'
     end
 
     # For all runnable environments
