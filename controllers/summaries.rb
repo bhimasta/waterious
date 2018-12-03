@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'roda'
+require 'pusher-push-notifications'
 
 module Waterious
   # Web controller for Waterious API
@@ -8,7 +9,43 @@ module Waterious
     route('summaries') do |routing|
       @summary_route = "#{@api_root}/summaries"
 
-      # GET api/v1/summaries/today
+      # GET api/v1/summaries/broadcast_notification
+      routing.on 'broadcast_notification' do
+        routing.get do
+          Notification.new(Api.config)
+                      .broadcast('Reminder!!','Please drink more water','Hello')
+        
+          # Pusher::PushNotifications.configure do |config|
+          #   config.instance_id = 'a236022d-cd36-4b3f-b85f-a108953a7c20'
+          #   config.secret_key = '43B31145CE03EBCAF5B09313822465BB6C694A499363E810F3DB3ED07F51A55A'          
+          #   # config.instance_id = config['PUSHER_INSTANCE_ID']
+          #   # config.secret_key = config['PUSHER_SECRET_KEY']
+          # end
+          
+          # data = {
+          #   apns: {
+          #     aps: {
+          #       alert: {
+          #         title: 'Hello',
+          #         body: 'Hello, world!'
+          #       }
+          #     }
+          #   },
+          #   fcm: {
+          #     notification: {
+          #       title: 'Hello',
+          #       body: 'Hello, world!'
+          #     }
+          #   }
+          # }          
+          # Pusher::PushNotifications.publish(interests: ['MyUsernameofvar1'], payload: data)    
+          response.status = 201
+          response['Location'] = "#{@summary_route}/broadcast_notification"
+          { message: 'Sending push notification' }.to_json
+
+        end
+      end
+
       routing.on 'today' do
         routing.get do
           account = Account.first(username: @auth_account['username'])
@@ -34,12 +71,32 @@ module Waterious
           start_date = Date.today
           today_summaries = Summary.where(date_start: start_date).all
           today_summaries.map do |summary|
+            stripped_username = summary.owner.username.gsub(' ', '')
+            # puts "the username"
+            # puts stripped_username
             new_total_die = summary.total_die
             new_hydration = summary.current_hydration - 34
             if (new_hydration <= 0) 
               new_hydration = 400
               new_total_die += 1
+
+              # die <-- create new here
+              gone_data = {}
+              gone_data['victim'] = summary.living_object
+              gone = Waterious::CreateGoneForSummary.call(
+                summary_id: summary.id, gone_data: gone_data
+              )  
+              # send notification #die
+              Notification.new(Api.config).broadcast('Oh No!!!!', "it died, please keep it alive next time", stripped_username)              
+            else
+              # send notification if not die
+              if (new_hydration < 100 || 
+                (new_hydration >= 160 && new_hydration <=  200) ||
+                (new_hydration >= 270 && new_hydration <=  300)) 
+                Notification.new(Api.config).broadcast('Reminder!', "Please drink water", stripped_username)    
+              end  
             end
+  
             Waterious::Summary.where(id: summary.id)
                               .update(current_hydration: new_hydration,
                                       total_die: new_total_die)
