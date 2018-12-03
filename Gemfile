@@ -3,6 +3,8 @@ ruby '2.5.1'
 
 gem 'http_headers'
 gem 'parser', '2.5.1'
+# gem 'pusher'
+gem 'pusher-push-notifications'
 
 # Web API
 gem 'puma'
