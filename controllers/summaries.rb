@@ -13,32 +13,7 @@ module Waterious
       routing.on 'broadcast_notification' do
         routing.get do
           Notification.new(Api.config)
-                      .broadcast('Reminder!!','Please drink more water','Hello')
-        
-          # Pusher::PushNotifications.configure do |config|
-          #   config.instance_id = 'a236022d-cd36-4b3f-b85f-a108953a7c20'
-          #   config.secret_key = '43B31145CE03EBCAF5B09313822465BB6C694A499363E810F3DB3ED07F51A55A'          
-          #   # config.instance_id = config['PUSHER_INSTANCE_ID']
-          #   # config.secret_key = config['PUSHER_SECRET_KEY']
-          # end
-          
-          # data = {
-          #   apns: {
-          #     aps: {
-          #       alert: {
-          #         title: 'Hello',
-          #         body: 'Hello, world!'
-          #       }
-          #     }
-          #   },
-          #   fcm: {
-          #     notification: {
-          #       title: 'Hello',
-          #       body: 'Hello, world!'
-          #     }
-          #   }
-          # }          
-          # Pusher::PushNotifications.publish(interests: ['MyUsernameofvar1'], payload: data)    
+                      .broadcast('Reminder!!','Please drink more water','Hello') 
           response.status = 201
           response['Location'] = "#{@summary_route}/broadcast_notification"
           { message: 'Sending push notification' }.to_json
@@ -72,8 +47,7 @@ module Waterious
           today_summaries = Summary.where(date_start: start_date).all
           today_summaries.map do |summary|
             stripped_username = summary.owner.username.gsub(' ', '')
-            # puts "the username"
-            # puts stripped_username
+
             new_total_die = summary.total_die
             new_hydration = summary.current_hydration - 34
             if (new_hydration <= 0) 
@@ -86,7 +60,6 @@ module Waterious
               gone = Waterious::CreateGoneForSummary.call(
                 summary_id: summary.id, gone_data: gone_data
               )  
-              # send notification #die
               Notification.new(Api.config).broadcast('Oh No!!!!', "it died, please keep it alive next time", stripped_username)              
             else
               # send notification if not die
