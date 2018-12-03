@@ -13,7 +13,7 @@ module Waterious
       routing.on 'broadcast_notification' do
         routing.get do
           Notification.new(Api.config)
-                      .broadcast('Reminder!!','Please drink more water','Hello') 
+                      .broadcast('Reminder!!','Please drink more water','hello') 
           response.status = 201
           response['Location'] = "#{@summary_route}/broadcast_notification"
           { message: 'Sending push notification' }.to_json
