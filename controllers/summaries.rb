@@ -17,7 +17,6 @@ module Waterious
           response.status = 201
           response['Location'] = "#{@summary_route}/broadcast_notification"
           { message: 'Sending push notification' }.to_json
-
         end
       end
 
@@ -60,13 +59,13 @@ module Waterious
               gone = Waterious::CreateGoneForSummary.call(
                 summary_id: summary.id, gone_data: gone_data
               )  
-              Notification.new(Api.config).broadcast('Oh No!!!!', "it died, please keep it alive next time", stripped_username)              
+              Notification.new(Api.config).broadcast('Oh No!!!!', "I just died, please take care of me next time", stripped_username)              
             else
               # send notification if not die
               if (new_hydration < 100 || 
                 (new_hydration >= 160 && new_hydration <=  200) ||
                 (new_hydration >= 270 && new_hydration <=  300)) 
-                Notification.new(Api.config).broadcast('Reminder!', "Please drink water", stripped_username)    
+                Notification.new(Api.config).broadcast('Reminder!', "Tap in now, I need your help!!", stripped_username)    
               end  
             end
   

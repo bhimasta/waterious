@@ -54,10 +54,12 @@ module Waterious
         routing.get do
           var = 1
           x = {}
+          participants = ['li123','gao321','zhong213','zeng321','chen213','wang123','gaoren213',
+            'liao111','yang222','huang333','dai332','mao221','zhuang113','pan112','liao212']        
           new_account = {}
-          (1..15).each do
-            x['username'] = "Username" + var.to_s
-            x['password'] = "123456"
+          participants.each do |participant|
+            x['username'] = participant
+            x['password'] = participant
             x['email'] = "ManusiaHebat" + var.to_s + "@iss.nthu.edu.tw"
             x['profile'] = "https://s3.amazonaws.com/Waterious-app/profile/default.jpg"
             new_account = EmailAccount.new(x)
@@ -67,7 +69,6 @@ module Waterious
           response.status = 201
           response['Location'] = "#{@account_route}/#{new_account.id}"
           { message: 'All Account created' }.to_json
-          # { message: 'Haiiii' }.to_json
         rescue StandardError => error
           puts "ERROR CREATING 15 ACCOUNTS: #{error.inspect}"
           puts error.backtrace
@@ -81,11 +82,24 @@ module Waterious
           long_a_condition = 5
           condition = 1
           accounts = Account.all
+          
+          # for testing first day
+          x = 1
           accounts.each do |account|
-            #update condition
-            # puts "now its condition: "
-            # puts condition
+            summary_data = {}
+            start_date = Date.today
+            summary_data['date_start'] = start_date
+            summary_data['living_object'] = 'Human' if x <= 5
+            summary_data['living_object'] = 'Animal' if x <= 10
+            summary_data['living_object'] = 'Plant' if x <= 15
+            # puts summary_data
+            x += 1
+            Waterious::CreateSummaryForUser.call(owner_id: account.id, summary_data: summary_data)          
+          end
 
+          # for real experiment
+          accounts.each do |account|
+            
             Waterious::Account.where(id: account.id).update(condition: condition)
 
             condition = condition + 1
@@ -95,14 +109,14 @@ module Waterious
             order = ['Human','Animal','Plant'] if condition == 1
             order = ['Animal','Plant','Human'] if condition == 2
             order = ['Plant','Human','Animal'] if condition == 3
-            start_date = Date.today
+            start_date = Date.today + 1
             order.each do |cond|
               (1..long_a_condition).each do
                 summary_data = {}
                 summary_data['date_start'] = start_date
                 start_date = start_date + 1
                 summary_data['living_object'] = cond
-                # puts data.to_json
+
                 Waterious::CreateSummaryForUser.call(owner_id: account.id, summary_data: summary_data)          
               end
             end              
