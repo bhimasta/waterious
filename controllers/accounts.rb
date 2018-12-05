@@ -133,6 +133,65 @@ module Waterious
         end
       end
 
+      routing.on 'new_accounts' do
+        routing.on String do |username|
+          routing.on String do |living_object|
+            routing.on Integer do |need_test|
+              routing.get do
+                # Create new account
+                x = {}
+                x['username'] = username
+                x['password'] = username
+                x['email'] = username.to_s + "@iss.nthu.edu.tw"
+                x['profile'] = "https://s3.amazonaws.com/Waterious-app/profile/default.jpg"
+                new_account = EmailAccount.new(x)
+
+                raise('Could not save account') unless new_account.save
+                # get account data
+                account = Account.first(username: username)
+
+                # puts account.to_json
+
+                start_date = Date.today
+                # Create test
+                if (need_test >= 1)
+                  (1..need_test).each do |x|
+                    summary_data = {}
+                    summary_data['date_start'] = start_date
+                    summary_data['living_object'] = living_object
+                    # puts summary_data
+                    Waterious::CreateSummaryForUser.call(owner_id: account.id, summary_data: summary_data) 
+                    start_date = start_date + 1  
+                  end
+                end
+
+                # Create randomization
+                # Generate data
+                long_a_condition = 5
+                order = ['Human','Animal','Plant'] if living_object == 'Human'
+                order = ['Animal','Plant','Human'] if living_object == 'Animal'
+                order = ['Plant','Human','Animal'] if living_object == 'Plant'
+                order.each do |cond|
+                  (1..long_a_condition).each do
+                    summary_data = {}
+                    summary_data['date_start'] = start_date
+                    start_date = start_date + 1
+                    summary_data['living_object'] = cond
+
+                    Waterious::CreateSummaryForUser.call(owner_id: account.id, summary_data: summary_data)          
+                  end
+                end      
+                { message: 'Account has been succesfully created' }.to_json
+              rescue StandardError => error
+                puts "ERROR CREATING ACCOUNTS: #{error.inspect}"
+                puts error.backtrace
+                routing.halt 404, { message: error.message }.to_json        
+              end
+            end
+          end
+        end
+      end      
+
       # POST api/v1/accounts/password/edit
       routing.on 'password' do
         routing.on 'edit' do
