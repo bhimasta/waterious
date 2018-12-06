@@ -62,9 +62,7 @@ module Waterious
               Notification.new(Api.config).broadcast('Oh No!!!!', "I just died, please take care of me next time", stripped_username)              
             else
               # send notification if not die
-              if (new_hydration < 100 || 
-                (new_hydration >= 160 && new_hydration <=  200) ||
-                (new_hydration >= 270 && new_hydration <=  300)) 
+              if (new_hydration >= 60 && new_hydration <=  100)
                 Notification.new(Api.config).broadcast('Reminder!', "Tap in now, I need your help!!", stripped_username)    
               end  
             end
